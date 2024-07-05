@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import * as bcrypt from 'bcrypt';
 import Mongoose from 'mongoose';
 
 export const UsersSchema = new Mongoose.Schema({
@@ -10,9 +10,9 @@ export const UsersSchema = new Mongoose.Schema({
 UsersSchema.pre('save', async function (next) {
   try {
     if (!this.isModified('password')) return next();
-    this['password'] = createHash('sha256')
-      .update(this['password'])
-      .digest('hex');
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this['password'], salt);
+    this['password'] = hashedPassword;
   } catch (error) {
     return next(error);
   }

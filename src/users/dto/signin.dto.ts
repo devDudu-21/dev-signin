@@ -5,7 +5,7 @@ import {
   IsStrongPassword,
 } from 'class-validator';
 
-export abstract class SigninDTO {
+export abstract class SignInDto {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
